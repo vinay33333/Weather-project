@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast App - Sampath Vinay Ram Vuppala</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-600 transition-all duration-1000">
+    
+    <!-- Custom Error/Success Messages (No JS alert!) -->
+    <div id="errorMessage" class="hidden fixed top-4 right-4 bg-red-500 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <span id="errorText"></span>
+            </div>
+            <button onclick="hideMessage('error')" class="ml-3 text-white hover:text-red-200">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="successMessage" class="hidden fixed top-4 right-4 bg-green-500 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span id="successText"></span>
+            </div>
+            <button onclick="hideMessage('success')" class="ml-3 text-white hover:text-green-200">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="hidden fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-40">
+        <div class="bg-white p-6 rounded-lg flex items-center space-x-3">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span class="text-gray-700 font-medium">Loading weather data...</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white bg-opacity-10 backdrop-blur-md shadow-lg border-b border-white border-opacity-20">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 flex items-center justify-center">
+                <i class="fas fa-cloud-sun-rain mr-4 text-yellow-300"></i>
+                WeatherCast
+            </h1>
+            <p class="text-white text-opacity-90 text-lg md:text-xl">Your Personal Weather Companion</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        
+        <!-- Search Section -->
+        <section class="bg-white bg-opacity-15 backdrop-blur-lg rounded-2xl shadow-xl p-6 mb-8 border border-white border-opacity-20">
+            <div class="flex flex-col lg:flex-row gap-4 items-end">
+                <!-- City Search Input with Recent Cities Dropdown -->
+                <div class="flex-1 max-w-md mx-auto lg:mx-0 relative">
+                    <label for="cityInput" class="block text-white text-sm font-medium mb-2">
+                        <i class="fas fa-search mr-1"></i> Search City
+                    </label>
+                    <input 
+                        type="text" 
+                        id="cityInput" 
+                        placeholder="Enter city name (e.g., London, Mumbai)" 
+                        class="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-blue-400 text-gray-800 shadow-lg"
+                        autocomplete="off"
+                    >
+                    <!-- Recent Cities Dropdown -->
+                    <div id="recentCitiesDropdown" class="hidden absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-xl z-30 max-h-48 overflow-y-auto border">
+                        <!-- Recent cities will be populated here -->
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
+                    <button id="searchBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl flex items-center">
+                        <i class="fas fa-search mr-2"></i>Search Weather
+                    </button>
+                    <button id="currentLocationBtn" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl flex items-center">
+                        <i class="fas fa-location-arrow mr-2"></i>My Location
+                    </button>
+                    <button id="clearBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl flex items-center">
+                        <i class="fas fa-eraser mr-2"></i>Clear
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Weather Display -->
+        <section id="currentWeatherSection" class="hidden bg-white bg-opacity-15 backdrop-blur-lg rounded-2xl shadow-xl p-8 mb-8 border border-white border-opacity-20">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold text-white mb-2">Current Weather</h2>
+                <p id="currentLocationName" class="text-white text-opacity-90 text-xl">--</p>
+                <p id="currentDateTime" class="text-white text-opacity-70 text-sm mt-1">--</p>
+            </div>
+            
+            <!-- Extreme Temperature Alert -->
+            <div id="tempAlert" class="hidden mb-6 p-4 rounded-lg border-l-4">
+                <div class="flex items-center">
+                    <i id="tempAlertIcon" class="text-2xl mr-3"></i>
+                    <span id="tempAlertText" class="font-semibold"></span>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                <!-- Main Weather Info -->
+                <div class="text-center lg:col-span-1">
+                    <div id="mainWeatherIcon" class="text-8xl md:text-9xl mb-4 animate-bounce">🌤️</div>
+                    <div class="flex items-center justify-center gap-3 mb-2">
+                        <span id="currentTemp" class="text-5xl md:text-6xl font-bold text-white">--°</span>
+                        <button id="tempToggleBtn" class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-lg text-sm hover:bg-opacity-30 transition-all">
+                            °C/°F
+                        </button>
+                    </div>
+                    <p id="weatherDescription" class="text-white text-opacity-90 text-xl capitalize">--</p>
+                    <p id="feelsLike" class="text-white text-opacity-70 mt-1">Feels like --°</p>
+                </div>
+                
+                <!-- Weather Details Grid -->
+                <div class="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+                        <i class="fas fa-tint text-blue-300 text-2xl mb-2"></i>
+                        <p class="text-white text-opacity-70 text-sm">Humidity</p>
+                        <p id="humidity" class="text-white text-xl font-semibold">--%</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+                        <i class="fas fa-wind text-gray-300 text-2xl mb-2"></i>
+                        <p class="text-white text-opacity-70 text-sm">Wind Speed</p>
+                        <p id="windSpeed" class="text-white text-xl font-semibold">-- km/h</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+                        <i class="fas fa-eye text-yellow-300 text-2xl mb-2"></i>
+                        <p class="text-white text-opacity-70 text-sm">Visibility</p>
+                        <p id="visibility" class="text-white text-xl font-semibold">-- km</p>
+                    </div>
+                    <div class="bg-white bg-opacity-10 rounded-lg p-4 text-center">
+                        <i class="fas fa-thermometer-half text-red-300 text-2xl mb-2"></i>
+                        <p class="text-white text-opacity-70 text-sm">Pressure</p>
+                        <p id="pressure" class="text-white text-xl font-semibold">-- hPa</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5-Day Forecast Section -->
+        <section id="forecastSection" class="hidden bg-white bg-opacity-15 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-white border-opacity-20">
+            <h2 class="text-3xl font-bold text-white text-center mb-6">
+                <i class="fas fa-calendar-alt mr-2"></i>5-Day Forecast
+            </h2>
+            <div id="forecastContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <!-- Forecast cards will be populated here -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white bg-opacity-10 backdrop-blur-md mt-16 py-6 border-t border-white border-opacity-20">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-white text-opacity-70">
+                &copy; 2025 WeatherCast App by <strong>Sampath Vinay Ram Vuppala</strong>
+            </p>
+            <p class="text-white text-opacity-50 text-sm mt-1">
+                Built with JavaScript, Tailwind CSS & OpenWeatherMap API
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
