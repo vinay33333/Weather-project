@@ -1,0 +1,284 @@
+
+/* Author: Sampath Vinay Ram Vuppala */
+
+/* Smooth transitions for all elements */
+* {
+    transition: all 0.3s ease;
+}
+
+/* ===== CRYSTAL CLEAR Recent Cities Dropdown (NO BLUR!) ===== */
+.crystal-clear-dropdown {
+    background-color: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    z-index: 1000 !important;
+}
+
+/* Force clear text in dropdown */
+.crystal-clear-dropdown * {
+    color: #1a202c !important;
+}
+
+/* Recent city items styling */
+.recent-city-item {
+    background: white !important;
+    color: #2d3748 !important;
+}
+
+.recent-city-item:hover {
+    background: #f7fafc !important;
+    color: #2b6cb0 !important;
+    transform: translateX(2px) !important;
+}
+
+.recent-city-item:last-child {
+    border-bottom: none !important;
+}
+
+/* Dynamic Weather Backgrounds */
+.weather-clear {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 50%, #fdcb6e 100%);
+}
+
+.weather-clouds {
+    background: linear-gradient(135deg, #636e72 0%, #2d3436 50%, #74b9ff 100%);
+}
+
+.weather-rain {
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 50%, #2d3436 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated rain effect */
+.weather-rain::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: 
+        linear-gradient(transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+    background-size: 30px 100px, 100px 30px;
+    animation: rain 2s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes rain {
+    0% { transform: translateX(-100px) translateY(-100px); }
+    100% { transform: translateX(100px) translateY(100px); }
+}
+
+.weather-snow {
+    background: linear-gradient(135deg, #ddd6fe 0%, #8b5cf6 50%, #1e1b4b 100%);
+}
+
+.weather-thunderstorm {
+    background: linear-gradient(135deg, #2d3436 0%, #636e72 50%, #74b9ff 100%);
+}
+
+/* Weather icon animations */
+.weather-icon-animate {
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.weather-icon-rotate {
+    animation: iconRotate 10s linear infinite;
+}
+
+@keyframes iconRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Forecast card hover effects */
+.forecast-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: default;
+}
+
+.forecast-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* Loading animation */
+.loading-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Custom scrollbar */
+.crystal-clear-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.crystal-clear-dropdown::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.crystal-clear-dropdown::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.crystal-clear-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Glass morphism enhancement for other elements */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Alert animations */
+.alert-slide-in {
+    animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.alert-slide-out {
+    animation: slideOutRight 0.5s ease-in;
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Temperature toggle button enhancement */
+#tempToggleBtn:active {
+    transform: scale(0.95);
+}
+
+/* Extreme weather alert styles */
+.heat-alert {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border-left-color: #c0392b;
+    color: white;
+}
+
+.cold-alert {
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    border-left-color: #2980b9;
+    color: white;
+}
+
+/* Responsive font scaling */
+@media (max-width: 640px) {
+    .text-6xl { font-size: 3rem; }
+    .text-5xl { font-size: 2.5rem; }
+    .text-9xl { font-size: 5rem; }
+    .text-8xl { font-size: 4rem; }
+}
+
+/* Enhanced button hover effects */
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Input focus effects */
+input:focus {
+    ring-color: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+}
+
+/* Notification enhancements */
+#errorMessage, #successMessage {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Loading spinner enhancements */
+#loadingSpinner {
+    backdrop-filter: blur(5px);
+}
+
+/* Weather section animations */
+#currentWeatherSection, #forecastSection {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced dropdown positioning */
+#recentCitiesDropdown {
+    min-width: 100%;
+    max-width: 400px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .crystal-clear-dropdown {
+        max-height: 60vh !important;
+    }
+    
+    .recent-city-item {
+        padding: 16px 12px !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .crystal-clear-dropdown {
+        border: 2px solid #000 !important;
+    }
+    
+    .recent-city-item {
+        border-bottom: 1px solid #000 !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
