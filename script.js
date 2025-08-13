@@ -1,9 +1,6 @@
 // ======================== Weather Forecast Application ========================
 // Author: Sampath Vinay Ram Vuppala
-// Description: Complete weather forecast app optimized for 200/200 marks
-// API: OpenWeatherMap API for weather data
-// Assignment: Weather Forecast Application (200 marks total)
-// ==============================================================================
+
 
 // ===== API Configuration =====
 const API_KEY = 'ef162e8dd46f197be49eacffba4c775e';
